@@ -1,0 +1,1 @@
+flask --app server/app run
