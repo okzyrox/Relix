@@ -1,0 +1,3 @@
+ROBLOX_API_KEY = ""
+DISCORD_WEBHOOK = ""
+
