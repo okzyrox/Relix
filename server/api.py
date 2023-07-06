@@ -1,4 +1,10 @@
-import requests, json
+import requests, json, os
+
+import env_secrets as secrets
+
+ROBLO_SECURITY = os.getenv("ROBLO_SECURITY", secrets.ROBLO_SECURITY)
+ROBLOX_API_KEY = os.getenv("ROBLOX_API_KEY", secrets.ROBLOX_API_KEY)
+
 
 class publicApi():
     def fetchServersList(self, gameId:int = 0, limit:int=100, ordering:str="Asc") -> (requests.Response or None):
