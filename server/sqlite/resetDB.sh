@@ -1,0 +1,1 @@
+rm helixDb.db
