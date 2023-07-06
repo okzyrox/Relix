@@ -69,7 +69,7 @@ POST@`/login` - authentication with helix
             "banData":{
                 "reportingUserId":"id",
                 "reason":"",
-                "data":"",
+                "date":"",
                 "expiry":""/"Never",
 
             },
