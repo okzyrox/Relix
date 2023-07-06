@@ -4,8 +4,24 @@
 
 # GET
 `/servers/<placeid>` - gets the placeids servers listing json (directly from robloxs game api)
+### Implemented as `/servers/listings/`
+- NOTE:  placeId parameter not required currently
+
 - response:
-    - json
+    - ```json``` : {
+        '{serverId}' : {
+            "id": "{serverId}",
+            "maxPlayers": XXX,
+            "playing": XXX,
+            "playerTokens": [
+                ..
+            ],
+            "players": [],
+            "fps": XX,
+            "ping": XX
+        }
+    }```
+
 
 `/accessories` - gets a list of ids for roblox accessories that are blacklisted
 - response:
