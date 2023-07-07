@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import HttpResponse, JsonResponse
 from django.db.models import Q
 
@@ -59,36 +59,78 @@ def createRobloxUserEntry(rblxid):
     newusr.suspended_license = False
     newusr.save()
 
-def fetchUsr(robloxId):
+def userExistsView(request):
     try:
-        usr = robloxUser.objects.get(robloxId=robloxId)
+        usr = robloxUser.objects.get(robloxId=str(request.GET["user"]))
+        if usr:
+            return JsonResponse({
+                "result":{
+                    "userExists":True
+                }
+            })
+            
     except:
-        createRobloxUserEntry(robloxId)
-        fetchUsr(robloxId)
+        return JsonResponse({
+                "result":{
+                    "userExists":False
+                }
+            })
+
+def fetchUsr(accountId):
+    try:
+        
+        usr = robloxUser.objects.get(robloxId=str(accountId))
+    except:
+        raise Exception("Specified User does not exist")
     
     return usr
 
+def createUser(request):
+    if request.method == 'GET':
+        accountId = request.GET["user"]
+        print(accountId)
+        try:
+            check = robloxUser.objects.get(robloxId=str(request.GET["user"]))
+            print(check)
+            return redirect(f"/login/?user={accountId}")
+        except:
+            pass
+        try:
+            usr = robloxUser(robloxId=str(accountId), is_banned=False, has_drivers_license=False, suspended_license=False, active=False)
+            usr.save()
+        except:
+            return JsonResponse({
+                "result":{
+                    "userCreated":False,
+                    "errorMessage":"Unexpected Error occurred"
+                }
+            })
+        return JsonResponse({
+            "result":{
+                "userCreated":True,
+                "errorMessage":""
+            }
+        })
 
 def login(request):
     if request.method == 'GET':
-        print(request.GET.get("q"))
-    #if 1 == 1:
-        try:
-            
-            usr = fetchUsr(robloxId=request.GET.get("q"))
-        except:
-            print("Unexpected error occurred")
-            return HttpResponse(403)
-        #usr = robloxUser.objects.get(robloxId="179407655")
+        # login user
+        usr = fetchUsr(accountId=str(request.GET["user"]))
         usr.active = True
         usr.save()
+
+        #fetch user certs
         usrCerts = usr.userCerts.all()
+
+        # check drivers license
         if usr.has_drivers_license == True:
             driveLicense = "Active"
         elif usr.has_drivers_license == False and usr.suspended_license == True:
             driveLicense = "Suspended"
         else:
             driveLicense = "Inactive"
+        
+        # response check with ban status
         if usr.is_banned == True:
             responseDict = {
                 "result":{
@@ -124,7 +166,6 @@ def login(request):
             }
         i = 0
         for cert in usrCerts:
-            print(cert.certId)
             responseDict["result"]["certs"][f"{i}"] = cert.certId
             i += 1
         return JsonResponse(responseDict)
@@ -132,7 +173,7 @@ def login(request):
         return HttpResponse("Not Authorized")
 
 def logout(request):
-    if request.method == 'POST':
-        usr = robloxUser.objects.get(robloxId=request.POST.get('robloxId'))
+    if request.method == 'GET':
+        usr = robloxUser.objects.get(robloxId=str(request.GET.get('user')))
         usr.active = False
         usr.save()
