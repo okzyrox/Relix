@@ -1,0 +1,4 @@
+bannedByRobloxUserId
+bannedReason
+bannedDate
+bannedExpire or Never

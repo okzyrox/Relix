@@ -3,7 +3,7 @@ from .app import flaskApp
 
 from . import api
 
-import requests, json
+import requests, json, os
 
 liveGameId = 14000952723
 
@@ -43,8 +43,12 @@ def serverList():
 
     data = json.loads(publicServers.text)
     availableServers = len(data["data"])
-    
     listings = {"result":{}}
+    if availableServers <= 0:
+        listings["success"] = False
+    else:
+        listings["success"] = True
+    
     
     val = 0
     for i in range(0, availableServers):
@@ -58,3 +62,31 @@ def serverList():
     #listings = dict(listings)
 
     return listings
+
+@flaskApp.route("/banned")
+def isUserBanned():
+    userParam = request.args.get("targetRobloxId")
+    if userParam is None:
+        return {"success":False}
+    print(userParam)
+    print(type(userParam))
+    if os.path.exists(f"server/bans/{userParam}.txt"):
+        file = open(f"server/bans/{userParam}.txt").read().splitlines()
+        print(file)
+        return {
+            "is_banned":True,
+            "success":True,
+            "data":{
+                "reportingUserId":file[0],
+                "reason":file[1],
+                "date":file[2],
+                "expiry":file[3]
+            }
+        }
+    else:
+        return {
+            "success":True,
+            "is_banned":False,
+        }
+
+
