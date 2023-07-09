@@ -5,7 +5,7 @@ import api
 
 import requests, json
 
-liveGameId = 4572543057
+liveGameId = 14000952723
 
 api = api.publicApi()
 
@@ -20,7 +20,7 @@ def test():
 # returns the playercounts of 2 (temp) current active servers
 @flaskApp.route("/servers/players")
 def serverPlayersList():
-    placeId = 4572543057
+    placeId = 14000952723
     publicServers = api.fetchServersList(gameId=placeId, limit=100, ordering="Asc")
 
     data = json.loads(publicServers.text)
@@ -38,7 +38,7 @@ def serverPlayersList():
 
 @flaskApp.route("/servers/listings")
 def serverList():
-    placeId = 4572543057
+    placeId = 14000952723
     publicServers = api.fetchServersList(gameId=placeId, limit=100, ordering="Asc")
 
     data = json.loads(publicServers.text)
