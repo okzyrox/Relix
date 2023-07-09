@@ -6,7 +6,7 @@ ROBLO_SECURITY = "" # for bot account, needs high enough permissions, dont share
 # non-overrides
 
 # api keys to access Relix with
-HELIX_API_KEYS = [
+RELIX_API_KEYS = [
     "", # insert keys here
     ""
 ]
