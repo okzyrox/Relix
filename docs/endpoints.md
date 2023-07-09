@@ -58,7 +58,7 @@ has: Boolean (true if it's being issued, false if being revoked)
 
 # AUTH
 
-POST@`/login` - authentication with helix
+POST@`/login` - authentication with relix
 - params:
     - usedId: player user id
 - response:
@@ -84,7 +84,7 @@ POST@`/login` - authentication with helix
     } 
 ```
 
-POST@`/logout` - deauthentication with helix
+POST@`/logout` - deauthentication with relix
 - params:
     - usedId: player user id
 # Unknown
