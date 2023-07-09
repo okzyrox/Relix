@@ -1,7 +1,7 @@
 from flask import request
-from app import flaskApp
+from .app import flaskApp
 
-import api
+from . import api
 
 import requests, json
 
