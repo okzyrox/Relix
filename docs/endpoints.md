@@ -8,20 +8,20 @@
 - NOTE:  placeId parameter not required currently
 
 - response:
-    - ```json``` : {
-        '{serverId}' : {
+```json  {
+        '(serverId)' : {
             "id": "{serverId}",
-            "maxPlayers": XXX,
-            "playing": XXX,
+            "maxPlayers": integer,
+            "playing": integer,
             "playerTokens": [
                 ..
             ],
             "players": [],
-            "fps": XX,
-            "ping": XX
+            "fps": float,
+            "ping": float
         }
-    }```
-
+    }
+```
 
 `/accessories` - gets a list of ids for roblox accessories that are blacklisted
 - response:
@@ -29,17 +29,19 @@
 
 # POST/PUT
 `/activity` - used for logging playtime activity for departments
-- params:
-    - robloxUserId 'userId'
-    - seconds playing 'seconds'
-    - current team name 'team'
+
+    - params:
+        - robloxUserId : 'userId'
+        - seconds playing : 'seconds'
+        - current team name : 'team'
 
 `/activity` (again) - used for logging playtime activity for departments
-- params:
-    - robloxUserId "userId"
-    - start iso time "start"
-    - end iso time "end"
-    - team name/team "team"
+
+    - params:
+        - robloxUserId : "userId"
+        - start iso time : "start"
+        - end iso time : "end"
+        - team name/team : "team"
 
 
 
@@ -52,16 +54,20 @@ has: Boolean (true if it's being issued, false if being revoked)
 
 # PUT 
 `/certification` - used for adding user certifications to be checked, such as driving license, events, etc
-- params:
-    - Code: 'RAISA/CERT/' + certification id
-    - UserIds: list of users to add (for bulk add, otherwise just one)
+
+    - params:
+        - Code: 'RAISA/CERT/' + certification id
+        - UserIds: list of users to add (for bulk add, otherwise just one)
 
 # AUTH
 
 POST@`/login` - authentication with relix
-- params:
-    - usedId: player user id
+
+    - params:
+        - usedId: player user id
+
 - response:
+
 ```json 
     {
     "result": {
@@ -85,20 +91,21 @@ POST@`/login` - authentication with relix
 ```
 
 POST@`/logout` - deauthentication with relix
-- params:
-    - usedId: player user id
+
+    - params:
+        - usedId: player user id
 
 # APPLICATIONS
 
 GET@`/appTemplates?id=` - returns app templates, or an app template from id
 
-- params:
-    - application template id (url) (optional, if not provided all templates are returned) : (?id)
+    - params:
+        - application template id (url) (optional, if not provided all templates are returned) : (?id)
 
 GET@`/appHistory` - gets application history for a user
 
-- params:
-    - userId: id of user to get apps of
+    - params:
+        - userId: id of user to get apps of
 
 GET@`/application?id=` = gets application from id
 
@@ -146,14 +153,16 @@ POST@`/rank` - change rank of user in specified group
 - url: `/proxy`
     - proxy discord webhooks?
 
-- url: `/heartbeat`
+
+`/heartbeat` 
+
     - params:
-        - jobId: server hash id
-        - privateId: private server id
-        - playerCount: amount of players in game
-        - maxPlayers: max players allowed in game
-        - players: current players in game (list?)
-        - mainServer: bool value, checks if the server is the 'mainServer'
+        - jobId : server hash id
+        - privateId : private server id
+        - playerCount : amount of players in game
+        - maxPlayers : max players allowed in game
+        - players : current players in game (list?)
+        - mainServer : bool value, checks if the server is the 'mainServer'
 
 
 - url: `/actionQueue`
