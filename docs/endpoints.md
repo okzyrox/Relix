@@ -91,27 +91,33 @@ POST@`/logout` - deauthentication with relix
 # APPLICATIONS
 
 GET@`/appTemplates?id=` - returns app templates, or an app template from id
+
 - params:
     - application template id (url) (optional, if not provided all templates are returned) : (?id)
 
 GET@`/appHistory` - gets application history for a user
+
 - params:
     - userId: id of user to get apps of
 
 GET@`/application?id=` = gets application from id
+
     - params:
         - application id (url) : applicationId (?id)
 
 GET@`/appCount?id=` - gets the amount of applications submitted by the user
+
     - params:
         - userId (url) : id (?id)
 
 GET@`/certification?userId=` - gets the certification that the user has
+
     - params:
         - roblox user id (url) : userId (?userId)
 
 
 POST@`/applications` - submit application url
+
     - params:
         - table: {
             submittingUserName: roblox username of player submitting app
@@ -126,6 +132,7 @@ POST@`/applications` - submit application url
 
 
 POST@`/rank` - change rank of user in specified group
+
     - params:
         - userId : roblox account user id
         - groupId : group id of group to change user rank in
