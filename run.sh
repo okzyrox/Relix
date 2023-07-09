@@ -1,1 +1,1 @@
-flask --app server/app run
+python3 ./flask_app.py
