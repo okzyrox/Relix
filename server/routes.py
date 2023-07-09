@@ -74,19 +74,23 @@ def isUserBanned():
         file = open(f"server/bans/{userParam}.txt").read().splitlines()
         print(file)
         return {
-            "is_banned":True,
-            "success":True,
-            "data":{
-                "reportingUserId":file[0],
-                "reason":file[1],
-                "date":file[2],
-                "expiry":file[3]
+            "result":{
+                "is_banned":True,
+                "success":True,
+                "data":{
+                    "reportingUserId":file[0],
+                    "reason":file[1],
+                    "date":file[2],
+                    "expiry":file[3]
+                }
             }
         }
     else:
         return {
-            "success":True,
-            "is_banned":False,
+            "result":{
+                "success":True,
+                "is_banned":False,
+            }
         }
 
 
