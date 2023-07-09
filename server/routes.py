@@ -44,10 +44,13 @@ def serverList():
     data = json.loads(publicServers.text)
     availableServers = len(data["data"])
     
-    listings = {}
-
+    listings = {"result":{}}
+    
+    val = 0
     for i in range(0, availableServers):
-        listings[f"{json.dumps(data['data'][i]['id'])})"] = data["data"][i]
+        val = i + 1
+        listings["result"][f"{val}"] = data["data"][i]
+        listings["result"][f"{val}"]["type"] = "live"
         #for f in range(0, len(json.dumps(data["data"][i]))):
 
 
