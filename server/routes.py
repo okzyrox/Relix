@@ -40,14 +40,18 @@ def serverPlayersList():
 def serverList():
     placeId = 14008354693
     publicServers = api.fetchServersList(gameId=placeId, limit=100, ordering="Asc")
+    templateServer = api.fetchServersList(gameId=14000952723, limit=100, ordering="Asc")
 
     data = json.loads(publicServers.text)
+    dataTemplate = json.loads(templateServer.text)
     availableServers = len(data["data"])
     listings = {"result":{}}
     if availableServers <= 0:
         listings["success"] = False
+        noServers = True
     else:
         listings["success"] = True
+        noServers = False
     
     
     val = 0
@@ -55,6 +59,20 @@ def serverList():
         val = i + 1
         listings["result"][f"{val}"] = data["data"][i]
         listings["result"][f"{val}"]["type"] = "live"
+    
+    if noServers:
+        listings = {
+            "result":{
+                "1":{
+                    "id":dataTemplate["data"]["id"],
+                    "type":"live",
+                    "maxPlayers":125,
+                    "playing":0,
+                    "fps":0,
+                    "ping":0
+                    },
+                }
+            }
         #for f in range(0, len(json.dumps(data["data"][i]))):
 
 
