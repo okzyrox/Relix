@@ -9,7 +9,7 @@ ROBLOX_API_KEY = os.getenv("ROBLOX_API_KEY", secrets.ROBLOX_API_KEY)
 class publicApi():
     def fetchServersList(self, gameId:int = 0, limit:int=100, ordering:str="Asc") -> (requests.Response or None):
         url = f"https://games.roblox.com/v1/games/{gameId}/servers/Public?sortOrder={ordering}&limit={limit}"
-        if gameId == 0:
+        if gameId == 0 or gameId == None:
             print("Invalid Game Id")
             return None
         else:

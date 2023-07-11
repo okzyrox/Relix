@@ -1,5 +1,5 @@
 # Relix
-Zeta Installation Systems API
+Lotus Systems API
 
 # License and Notice of Copyright
 
