@@ -64,7 +64,7 @@ def serverList():
         listings = {
             "result":{
                 "1":{
-                    "id":dataTemplate["data"][1]["id"],
+                    "id":dataTemplate["data"][0]["id"],
                     "type":"live",
                     "maxPlayers":125,
                     "playing":0,
