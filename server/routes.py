@@ -166,7 +166,7 @@ def loginUser():
         except:
             return {"result":{"success":False, "error":"RelixInternalError"}}
     else:
-        bandata = data.getBanData()
+        bandata = data.getBanData(userid=userParam)
         return {
             "result":{
                 "success":True,
