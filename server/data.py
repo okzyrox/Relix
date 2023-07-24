@@ -30,7 +30,7 @@ def isUserAuthed(userId):
 
 def authUser(userId:int, userName:str,timeIso:str):
     user = userId
-    if isUserAuthed(userid=user):
+    if isUserAuthed(userId=user):
         return (False, "UserAlreadyAuthed")
     else:
         userData = [str(user) + "\n", userName + "\n", timeIso + "\n"]
@@ -42,7 +42,7 @@ def authUser(userId:int, userName:str,timeIso:str):
 
 def deauthUser(userId:int):
     user = str(userId)
-    if isUserAuthed() == False:
+    if isUserAuthed(userId=user) == False:
         return (False, "UserNotAuthed")
     
     ## proxy log here

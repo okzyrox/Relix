@@ -25,8 +25,8 @@ class publicApi():
     
     def fetchPlayerUsernameFromId(self, playerId:int) -> tuple:
         """Fetches the player username from the player user id provided"""
-        url = f"https://users.roblox.com/v1/users/{playerId}"
-        if playerId == 0 or playerId is None:
+        url = f"https://users.roblox.com/v1/users/{str(playerId)}"
+        if playerId == str(0) or playerId is None:
             return (False, "InvalidId")
         
         try:
@@ -39,15 +39,17 @@ class publicApi():
 
         data = json.loads(r.text)
         response = {}
-
-        if data["errors"]:
-            match (data["errors"]["0"]["code"]) :
-                case 0:
-                    return (False, "NotFound")
-                case 3:
-                    return (False, "InvalidId")
-                case other:
-                    return (False, "UnknownError")
+        try:
+            if data["errors"]:
+                match (data["errors"]["0"]["code"]) :
+                    case 0:
+                        return (False, "NotFound")
+                    case 3:
+                        return (False, "InvalidId")
+                    case other:
+                        return (False, f"{data['error']['0']['message']}")
+        except Exception as e:
+            print(e)
         
         return (True, data["name"])
             

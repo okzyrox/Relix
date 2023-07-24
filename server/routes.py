@@ -132,19 +132,28 @@ def loginUser():
             #userId
             userid = userParam
             # userName
+
+
             try:
-                username = api.fetchPlayerUsernameFromId(int(userid))
-                if username[0] == False:
+                userName = api.fetchPlayerUsernameFromId(int(userid))
+
+                if userName[0] == False:
                     return {"result":{"success":False, "error":data[1]}}
                 else:
-                    username = username[1]
-            except:
-                return {"result":{"success":False, "error":"ApiFailure"}}
+                    userName = userName[1]
+            except Exception as e:
+                return {"result":{"success":False, "error":"FailedToFetch", "message":f"{e}"}}
+            
+
             # timeIso8601
             time = datetime.now().isoformat() + "Z"
 
-            authAttempt = data.authUser(userid, username, time)
+            # try to authenticate
 
+            authAttempt = data.authUser(userid, userName, time)
+
+
+            ## return to server
             if authAttempt[0] == False:
                 return {
                     "result":{
@@ -153,6 +162,8 @@ def loginUser():
                     }
                 }
             else:
+                # TODO
+                ## move to db smhmsmhmhmhmdm
                 return {
                     "result":{
                         "is_banned":False,
@@ -163,8 +174,9 @@ def loginUser():
                         }
                     }
                 }
-        except:
-            return {"result":{"success":False, "error":"RelixInternalError"}}
+        except Exception as e:
+            print(e)
+            return {"result":{"success":False, "error":"RelixInternalError", "message":f"{e}"}}
     else:
         bandata = data.getBanData(userId=userParam)
         return {
