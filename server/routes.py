@@ -47,13 +47,15 @@ def serverList():
     data = json.loads(publicServers.text)
     dataTemplate = json.loads(templateServer.text)
     availableServers = len(data["data"])
+    availableTemplServers = len(data["data"])
     listings = {"result":{}}
     if availableServers <= 0:
-        listings["success"] = False
-        noServers = True
-    else:
-        listings["success"] = True
-        noServers = False
+        if availableTemplServers <= 0:
+            listings["success"] = False
+            noServers = "Pseudo"
+        else:
+            listings["success"] = False
+            noServers = "Template"
     
     
     val = 0
@@ -62,11 +64,24 @@ def serverList():
         listings["result"][f"{val}"] = data["data"][i]
         listings["result"][f"{val}"]["type"] = "live"
     
-    if noServers:
+    if noServers == "Template":
         listings = {
             "result":{
                 "1":{
                     "id":dataTemplate["data"][0]["id"],
+                    "type":"live",
+                    "maxPlayers":125,
+                    "playing":0,
+                    "fps":0,
+                    "ping":0
+                    },
+                }
+            }
+    elif noServers == "Pseudo":
+        listings = {
+            "result":{
+                "1":{
+                    "id":"0",
                     "type":"live",
                     "maxPlayers":125,
                     "playing":0,
