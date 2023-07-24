@@ -6,6 +6,8 @@ from . import api, data
 import requests, json, os
 from datetime import datetime
 
+from . import env_secrets as secrets
+
 liveGameId = 14000952723
 
 api = api.publicApi()
@@ -184,14 +186,26 @@ def loginUser():
                         "is_banned":False,
                         "success":True,
                         "driversLicenseStatus":"Inactive",
-                        "certs":{
+                        "certifications":{
                             
                         }
                     }
                 }
         except Exception as e:
             print(e)
-            return {"result":{"success":False, "error":"RelixInternalError", "message":f"{e}"}}
+            if secrets.PYTHONANYWHERE_SERVER == True:
+                return {
+                    "result":{
+                        "is_banned":False,
+                        "success":True,
+                        "driversLicenseStatus":"Inactive",
+                        "certifications":{
+                            
+                        }
+                    }
+                }
+            else:
+                return {"result":{"success":False, "error":"RelixInternalError", "message":f"{e}"}}
     else:
         bandata = data.getBanData(userId=userParam)
         return {
