@@ -11,3 +11,5 @@ RELIX_API_KEYS = [
     ""
 ]
 DISCORD_WEBHOOK = ""  # default webhook
+
+PYTHONANYWHERE_SERVER = False

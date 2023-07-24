@@ -1,13 +1,15 @@
 from flask import request
 from .app import flaskApp
 
-from . import api
+from . import api, data
 
 import requests, json, os
+from datetime import datetime
 
 liveGameId = 14000952723
 
 api = api.publicApi()
+debugLogs = False
 
 @flaskApp.route("/")
 def index():
@@ -86,11 +88,13 @@ def isUserBanned():
     userParam = request.args.get("targetRobloxId")
     if userParam is None:
         return {"success":False}
-    print(userParam)
-    print(type(userParam))
-    if os.path.exists(f"server/bans/{userParam}.txt"):
-        file = open(f"server/bans/{userParam}.txt").read().splitlines()
-        print(file)
+    if debugLogs:
+        print(userParam)
+        print(type(userParam))
+    if data.isUserBanned(userParam):
+        file = data.getBanData(userParam)
+        if debugLogs:
+            print(file)
         return {
             "result":{
                 "is_banned":True,
@@ -112,3 +116,66 @@ def isUserBanned():
         }
 
 
+@flaskApp.route("/login")
+def loginUser():
+    userParam = request.args.get("userId")
+    if userParam is None:
+        return {"success":False}
+    
+    if debugLogs:
+        print(userParam)
+        print(type(userParam))
+        
+    if data.isUserBanned(userParam) == False:
+        try:
+
+            #userId
+            userid = userParam
+            # userName
+            try:
+                username = api.fetchPlayerUsernameFromId(int(userid))
+                if username[0] == False:
+                    return {"result":{"success":False, "error":data[1]}}
+                else:
+                    username = username[1]
+            except:
+                return {"result":{"success":False, "error":"ApiFailure"}}
+            # timeIso8601
+            time = datetime.now().isoformat() + "Z"
+
+            authAttempt = data.authUser(userid, username, time)
+
+            if authAttempt[0] == False:
+                return {
+                    "result":{
+                        "success":False,
+                        "error":authAttempt[1]
+                    }
+                }
+            else:
+                return {
+                    "result":{
+                        "is_banned":False,
+                        "success":True,
+                        "driversLicenseStatus":"Inactive",
+                        "certs":{
+                            
+                        }
+                    }
+                }
+        except:
+            return {"result":{"success":False, "error":"RelixInternalError"}}
+    else:
+        bandata = data.getBanData()
+        return {
+            "result":{
+                "success":True,
+                "is_banned":True,
+                "banData":{
+                    "reportingUserId":data[0],
+                    "reason":data[1],
+                    "date":data[2],
+                    "expiry":data[3]
+                }
+            }
+        }

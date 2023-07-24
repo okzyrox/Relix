@@ -1,3 +1,4 @@
+{filename == robloxUserId}
 bannedByRobloxUserId
 bannedReason
 bannedDate

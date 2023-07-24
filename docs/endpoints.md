@@ -151,7 +151,13 @@ POST@`/rank` - change rank of user in specified group
 
 - Method: ANY
 - url: `/proxy`
-    - proxy discord webhooks?
+    - used for sending and receiving data through proxying to normally blocked urls, such as Roblox's own urls, discord webhooks, etc
+
+    - params:
+        - webhookUrl
+        - webhookData
+        - ??
+        - ??
 
 
 `/heartbeat` 
