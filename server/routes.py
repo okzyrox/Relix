@@ -51,6 +51,7 @@ def serverList():
     availableServers = len(data["data"])
     availableTemplServers = len(data["data"])
     listings = {"result":{}}
+    noServers = None
     if availableServers <= 0:
         if availableTemplServers <= 0:
             listings["success"] = False
