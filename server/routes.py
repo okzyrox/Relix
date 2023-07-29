@@ -24,7 +24,7 @@ def test():
 # returns the playercounts of 2 (temp) current active servers
 @flaskApp.route("/servers/players")
 def serverPlayersList():
-    placeId = 14008354693 # place for Lotus.Game, 14000952723 is for Lotus.Servers
+    placeId = 14008354693 # place for Lotus.Game, 14000952723 is for Lotus.ServersList
     publicServers = api.fetchServersList(gameId=placeId, limit=100, ordering="Asc")
 
     data = json.loads(publicServers.text)
@@ -187,9 +187,7 @@ def loginUser():
                         "is_banned":False,
                         "success":True,
                         "driversLicenseStatus":"Inactive",
-                        "certifications":{
-                            
-                        }
+                        "certifications":[]
                     }
                 }
         except Exception as e:
@@ -221,3 +219,29 @@ def loginUser():
                 }
             }
         }
+
+@flaskApp.route("/accessories")
+def accessories():
+    try:
+        blacklistedAccessories = data.readAccessories()
+        return {
+            "result":{
+                "success":True,
+                "blacklist":blacklistedAccessories
+            }
+        }
+    except:
+        if secrets.PYTHONANYWHERE_SERVER:
+            return {
+                "result":{
+                    "success":True, 
+                    "blacklist":[]
+                }
+            }
+        else:
+            return {
+                "result":{
+                    "success":False,
+                    "error":"Failed to find blacklisted accessories"
+                }
+            }

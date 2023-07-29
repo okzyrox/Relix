@@ -54,6 +54,17 @@ def deauthUser(userId:int):
     except:
         return (False, "FailedToDeAuthUser")
 
+def readAccessories() -> list:
+    """returns the blacklisted accessories as a list of ids"""
+    accessories = []
+    try:
+        ac = open(f"server/data/common/accessories.txt").read().splitlines()
+        for acc in ac:
+            accessories.append(acc)
+        return accessories
+    except:
+        return accessories
+
     
 
         
