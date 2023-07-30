@@ -52,48 +52,50 @@ def serverList():
     dataTemplate = json.loads(templateServer.text)
     availableServers = len(data["data"])
     availableTemplServers = len(data["data"])
-    listings = {"result":{}}
+    listings = {"result":[]}
     noServers = None
     if availableServers <= 0:
         if availableTemplServers <= 0:
             listings["success"] = False
             noServers = "Pseudo"
+            print("IsPseudo")
         else:
             listings["success"] = False
             noServers = "Template"
-    
+            print("IsTemplate")
     
     val = 0
     for i in range(0, availableServers):
+        listings["result"].append(data["data"][i])
+        listings["result"][val]["type"] = "live"
         val = i + 1
-        listings["result"][f"{val}"] = data["data"][i]
-        listings["result"][f"{val}"]["type"] = "live"
+        
     
     if noServers == "Template":
         listings = {
-            "result":{
-                "1":{
-                    "id":dataTemplate["data"][0]["id"],
-                    "type":"live",
-                    "maxPlayers":125,
-                    "playing":0,
-                    "fps":0,
-                    "ping":0
+            "result":[
+                    {
+                        "id":dataTemplate["data"][0]["id"],
+                        "type":"live",
+                        "maxPlayers":125,
+                        "playing":0,
+                        "fps":0,
+                        "ping":0
                     },
-                }
+                ]
             }
     elif noServers == "Pseudo":
         listings = {
-            "result":{
-                "1":{
-                    "id":"0",
-                    "type":"live",
-                    "maxPlayers":125,
-                    "playing":0,
-                    "fps":0,
-                    "ping":0
+            "result":[
+                    {
+                        "id":"0",
+                        "type":"live",
+                        "maxPlayers":125,
+                        "playing":0,
+                        "fps":0,
+                        "ping":0
                     },
-                }
+                ]
             }
         #for f in range(0, len(json.dumps(data["data"][i]))):
 
