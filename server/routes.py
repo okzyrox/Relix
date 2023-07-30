@@ -8,6 +8,8 @@ from datetime import datetime
 
 from . import env_secrets as secrets
 
+from discord_webhook import DiscordWebhook, DiscordEmbed
+
 liveGameId = 14000952723
 
 api = api.publicApi()
@@ -245,3 +247,52 @@ def accessories():
                     "error":"Failed to find blacklisted accessories"
                 }
             }
+
+@flaskApp.route("/proxy", methods=["GET","POST"])
+def proxyRoute():
+    if request.method != 'POST':
+        return {"result":{"success":False, "status":405}}
+
+    agent = request.headers.get("User-Agent")
+    proxyUrl = request.args.get('Url')
+    #proxyUrlBody = request.args.get('Body')
+    requestData = request.data # rblx Request.Body
+    requestDataJson = json.loads(requestData)
+
+    if proxyUrl is None:
+        return {"result":{"success":False, "status":400}}
+
+    
+    print(
+        f"""
+        Proxy called!
+            - by: {agent}
+            - for: {proxyUrl}
+
+            - data (bin):{requestData}
+
+            - data (json): {requestDataJson}
+        """
+    )
+
+    try:
+        webhookUrl = proxyUrl
+        webhookMessageContent = requestDataJson["content"]
+        webhookMessageEmbed = requestDataJson["embeds"]
+        # {"content":"hello", "embeds":{"description":"test", "author":{"name":"relix", "url":"https://example.com"}, "thumbnail":{"url":"https://www.nannybutler.com/wp-content/uploads/2015/09/butler.jpg"}, "footer":{"text":"footertext"}, "color":"ffffff"}}
+        webhookEmbed = DiscordEmbed(
+            title="Relix Proxy",
+            description=webhookMessageEmbed["description"], # "description":"description text"
+            author=webhookMessageEmbed["author"], # "author":{"name":"Example", "url":"https://example.com"}
+            thumbnail=webhookMessageEmbed["thumbnail"], # "thumbnail":{"url":"https://example.com"}
+            footer=webhookMessageEmbed["footer"], # "footer":{"text":"footer text"}
+            color=str(webhookMessageEmbed["color"]) # "color":"ffffff" - no hash at start
+        )
+
+        webhook = DiscordWebhook(url=webhookUrl, content=webhookMessageContent, rate_limit_retry=True)
+        webhook.add_embed(webhookEmbed)
+
+        webhook.execute()
+        return {"result":{"success":True}}
+    except Exception as e:
+        return {"result":{"success":False, "error":str(e)}}

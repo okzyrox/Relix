@@ -80,12 +80,12 @@ POST@`/login` - authentication with relix
 
             },
             "driversLicenseStatus":"Active/Suspended",
-            "certs":{ // not sure why this isnt a list, but ok
-                "":"CERT_ID",
-                "":"CERT_ID",
-                "":"CERT_ID",
-                "":"CERT_ID"
-            }
+            "certs":[ 
+                "CERT_ID",
+                "CERT_ID",
+                "CERT_ID",
+                "CERT_ID"
+            ]
         }
     } 
 ```
