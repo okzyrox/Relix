@@ -28,24 +28,28 @@ def index():
 def test():
     return "<h1>testing</h1>"
 
-# returns the playercounts of 2 (temp) current active servers
+# returns the playercounts of  current active servers
 @flaskApp.route("/servers/players")
 def serverPlayersList():
     placeId = 14008354693 # place for Lotus.Game, 14000952723 is for Lotus.ServersList
-    publicServers = api.fetchServersList(gameId=placeId, limit=100, ordering="Asc")
+    try:
+        publicServers = api.fetchServersList(gameId=placeId, limit=100, ordering="Asc")
 
-    data = json.loads(publicServers.text)
-    availableServers = len(data["data"])
-    
-    users = {}
+        data = json.loads(publicServers.text)
+        availableServers = len(data["data"])
+        
+        users = {"result":{"players":[]}}
 
-    for i in range(0, availableServers):
-        users[f"{json.dumps(data['data'][i]['id'])})"] = json.dumps(data["data"][i]["playing"])
+        for i in range(0, availableServers):
+            users["result"]["players"].append(json.dumps(data["data"][i]["playing"]))#[f"players{json.dumps(data['data'][i]['id'])})"] =
 
-    users = sorted(users.items(), reverse=True)
-    users = dict(users)
+        users = sorted(users.items(), reverse=True)
+        users = dict(users)
 
-    return users
+        users["result"]["success"] = True
+        return users
+    except:
+        return {"result":{"success":False}}
 
 @flaskApp.route("/servers/listings")
 def serverList():
