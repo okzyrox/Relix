@@ -60,7 +60,10 @@ def readAccessories() -> list:
     try:
         ac = open(f"server/data/common/accessories.txt").read().splitlines()
         for acc in ac:
-            accessories.append(acc)
+            if acc.startswith("#"):
+                pass
+            else:
+                accessories.append(acc)
         return accessories
     except:
         return accessories

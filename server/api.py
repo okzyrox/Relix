@@ -7,6 +7,9 @@ ROBLOX_API_KEY = os.getenv("ROBLOX_API_KEY", secrets.ROBLOX_API_KEY)
 
 
 class publicApi():
+    def __init__(self, robloxApiKey="0", robloxSecurityKey="0"):
+        self.robloxApiKey = robloxApiKey
+        self.robloxSecurityKey = robloxSecurityKey
     def fetchServersList(self, gameId:int = 0, limit:int=100, ordering:str="Asc") -> (requests.Response or None):
         """Fetches the server data for the gameId provided"""
         url = f"https://games.roblox.com/v1/games/{gameId}/servers/Public?sortOrder={ordering}&limit={limit}"
