@@ -15,6 +15,11 @@ liveGameId = 14000952723
 api = api.publicApi()
 debugLogs = False
 
+def vprint(string:str):
+    if debugLogs:
+        print(f"[S] - {string}")
+
+
 @flaskApp.route("/")
 def index():
     return "relix server"
@@ -110,13 +115,12 @@ def isUserBanned():
     userParam = request.args.get("targetRobloxId")
     if userParam is None:
         return {"success":False}
-    if debugLogs:
-        print(userParam)
-        print(type(userParam))
+        
+    vprint(userParam)
+    vprint(type(userParam))
     if data.isUserBanned(userParam):
         file = data.getBanData(userParam)
-        if debugLogs:
-            print(file)
+        vprint(file)
         return {
             "result":{
                 "is_banned":True,
@@ -144,9 +148,9 @@ def loginUser():
     if userParam is None:
         return {"success":False}
     
-    if debugLogs:
-        print(userParam)
-        print(type(userParam))
+    #if debugLogs:
+    vprint(userParam)
+    vprint(type(userParam))
         
     if data.isUserBanned(userParam) == False:
         try:
@@ -196,7 +200,7 @@ def loginUser():
                 }
         except Exception as e:
             print(e)
-            if secrets.PYTHONANYWHERE_SERVER == True:
+            if secrets.SERVER_CANT_FILE == True:
                 return {
                     "result":{
                         "is_banned":False,
@@ -224,6 +228,55 @@ def loginUser():
             }
         }
 
+@flaskApp.route("/logout")
+def logoutUser():
+    userParam = request.args.get("userId")
+    if userParam is None:
+        return {"success":False}
+    
+    #if debugLogs:
+    vprint(userParam)
+    vprint(type(userParam))
+    if data.isUserBanned(userParam) == False:
+        try:
+            userid = userParam
+
+            deauthAttempt = data.deauthUser(int(userid))
+
+            ## return to server
+            if deauthAttempt[0] == True:
+                return {
+                    "result":{
+                        "success":True,
+                        "message":"User deauthed successfully"
+                    }
+                }
+            else:
+                return {
+                        "result":{
+                            "success":False,
+                            "error":deauthAttempt[1]
+                        }
+                    }
+        except Exception as e:
+            vprint(e)
+            if secrets.SERVER_CANT_FILE == True:
+                return {
+                    "result":{
+                        "success":False,
+                        "error":"File Operation not supported",
+                    }
+                }
+            else:
+                return {"result":{"success":False, "error":"RelixInternalError", "message":f"{e}"}}
+    else:
+        return {
+            "result":{
+                "success":False,
+                "error":"User is Banned"
+            }
+        }
+
 @flaskApp.route("/accessories")
 def accessories():
     try:
@@ -235,7 +288,7 @@ def accessories():
             }
         }
     except:
-        if secrets.PYTHONANYWHERE_SERVER:
+        if secrets.SERVER_CANT_FILE:
             return {
                 "result":{
                     "success":True, 

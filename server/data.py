@@ -3,7 +3,7 @@ import os
 from . import env_secrets
 
 
-# if env_secrets.PYTHONANYWHERE_SERVER == True:
+# if env_secrets.SERVER_CANT_FILE == True:
 #     default_path = "server/data/"
 # else:
 #     default_path = "data/"
